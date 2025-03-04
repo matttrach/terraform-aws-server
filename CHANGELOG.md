@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/matttrach/terraform-aws-server/compare/v1.3.1...v1.3.2) (2025-03-04)
+
+
+### Bug Fixes
+
+* remove version constraints ([#108](https://github.com/matttrach/terraform-aws-server/issues/108)) ([6bdb720](https://github.com/matttrach/terraform-aws-server/commit/6bdb7206425aca91d9e73487b05a1e66c8bb6f63))
+
 ## [1.3.1](https://github.com/rancher/terraform-aws-server/compare/v1.3.0...v1.3.1) (2024-08-27)
 
 
