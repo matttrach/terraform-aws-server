@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/matttrach/terraform-aws-server/compare/v1.4.1...v1.4.2) (2025-05-05)
+
+
+### Bug Fixes
+
+* add direct to project ([b0e8ea9](https://github.com/matttrach/terraform-aws-server/commit/b0e8ea9bb956472dcb9d445c13d708d287814e25))
+
 ## [1.4.1](https://github.com/rancher/terraform-aws-server/compare/v1.4.0...v1.4.1) (2025-05-02)
 
 
