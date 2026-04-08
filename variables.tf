@@ -57,10 +57,12 @@ variable "image_type" {
     Please be aware that some images require a subscription and will have additional cost over usage of the server.
     Current images are:
         "sles-15",
+        "sles-16",
         "sle-micro-55",
         "sle-micro-60",
         "sle-micro-61",
         "cis-rhel-8",
+        "cis-rhel-9",
         "ubuntu-22",
         "ubuntu-24",
         "rocky-9",
@@ -72,10 +74,12 @@ variable "image_type" {
     condition = (
       var.image_type == "" ? true : contains([
         "sles-15",
+        "sles-16",
         "sle-micro-55",
         "sle-micro-60",
         "sle-micro-61",
         "cis-rhel-8",
+        "cis-rhel-9",
         "ubuntu-22",
         "ubuntu-24",
         "rocky-9",
@@ -86,10 +90,12 @@ variable "image_type" {
     error_message = <<-EOT
       If specified, this must be one of 
         "sles-15",
+        "sles-16",
         "sle-micro-55",
         "sle-micro-60",
         "sle-micro-61",
         "cis-rhel-8",
+        "cis-rhel-9",
         "ubuntu-22",
         "ubuntu-24",
         "rocky-9",
@@ -143,15 +149,15 @@ variable "server_type" {
     The designation of server "type" from the ./server/types.tf file
     This will set the cpu, ram, and storage resources available to the server.
     Larger types will have higher costs, none of the types listed are in the free tier.
-    Current types are "small", "medium", "large", "xl", "xxl"
+    Current types are "small", "medium", "large", "xl", "xxl", "xxxl".
     Leave this blank when selecting a server.
   EOT
   default     = ""
   validation {
     condition = (
-      var.server_type == "" ? true : contains(["small", "medium", "large", "xl", "xxl"], var.server_type)
+      var.server_type == "" ? true : contains(["small", "medium", "large", "xl", "xxl", "xxxl"], var.server_type)
     )
-    error_message = "If specified, this must be one of 'small', 'medium', 'large', 'xl', or 'xxl'."
+    error_message = "If specified, this must be one of 'small', 'medium', 'large', 'xl', 'xxl', or 'xxxl'."
   }
 }
 variable "server_ip_family" {

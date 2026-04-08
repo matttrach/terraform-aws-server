@@ -1,13 +1,27 @@
 locals {
-  # image search is only valid for regions in the regions.txt file in thie directory
+  # image search is only valid for regions in the regions.txt file in this directory
   standard_types = {
     # using the getImages script in this directory with argument "sles"
     # suse-sles-15-sp6-chost-byos-v20250212-hvm-ssd-x86_64
+    # suse-sles-15-sp7-chost-byos-v20260323-hvm-ssd-x86_64
     sles-15 = { # BYOS = Bring Your Own Subscription
       user         = "ec2-user",
       group        = "wheel",
-      name         = "suse-sles-15-sp6-chost-byos-v*-hvm-ssd-x86_64",        #chost refers to an image that is optimized for running containers
-      name_regex   = "^suse-sles-15-sp6-chost-byos-v[0-9]+-hvm-ssd-x86_64$", # we are specifically trying to avoid the -ecs- images
+      name         = "suse-sles-15-sp7-chost-byos-v*-hvm-ssd-x86_64",        #chost refers to an image that is optimized for running containers
+      name_regex   = "^suse-sles-15-sp7-chost-byos-v[0-9]+-hvm-ssd-x86_64$", # we are specifically trying to avoid the -ecs- images
+      product_code = "",
+      owners       = ["013907871322"],
+      architecture = "x86_64",
+      workfolder   = "~"
+    },
+
+    # using the getImages script in this directory with argument "sles"
+    # suse-sles-16-0-chost-byos-v20260320-hvm-ssd-x86_64
+    sles-16 = { # BYOS = Bring Your Own Subscription
+      user         = "ec2-user",
+      group        = "wheel",
+      name         = "suse-sles-16-sp0-chost-byos-v*-hvm-ssd-x86_64",        #chost refers to an image that is optimized for running containers
+      name_regex   = "^suse-sles-16-sp0-chost-byos-v[0-9]+-hvm-ssd-x86_64$", # we are specifically trying to avoid the -ecs- images
       product_code = "",
       owners       = ["013907871322"],
       architecture = "x86_64",
@@ -43,7 +57,7 @@ locals {
     }
 
     # using the getImages script in this directory with argument "sle-micro"
-    # suse-sle-micro-6-1-byos-v20250210-hvm-ssd-x86_64
+    # suse-sle-micro-6-1-byos-v20260223-hvm-ssd-x86_64
     # sle micro is already optimized for containers
     sle-micro-61 = { # BYOS = Bring Your Own Subscription
       user         = "suse",
@@ -65,6 +79,20 @@ locals {
       name         = "CIS Red Hat Enterprise Linux 8 Benchmark - STIG*"
       name_regex   = ".*",
       product_code = "bysa8cc41lo4owixsmqw6v44f",
+      owners       = ["679593333241"],
+      architecture = "x86_64",
+      workfolder   = "/var/tmp"
+    },
+
+    # WARNING! you must subscribe and accept the terms to use this image
+    # https://aws.amazon.com/marketplace/server/procurement?productId=ca1fe94d-9237-41c7-8fc8-78b6b0658c9f
+    # example: CIS Red Hat Enterprise Linux 9 Benchmark - STIG - v04 -prod-ys6x446rhppue
+    cis-rhel-9 = {
+      user         = "ec2-user",
+      group        = "wheel",
+      name         = "CIS Red Hat Enterprise Linux 9 Benchmark - STIG*"
+      name_regex   = ".*",
+      product_code = "8seoq8e4ferkvwxcmmzw70l59",
       owners       = ["679593333241"],
       architecture = "x86_64",
       workfolder   = "/var/tmp"
