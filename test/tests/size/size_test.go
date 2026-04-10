@@ -80,3 +80,17 @@ func TestSizeXXL(t *testing.T) {
 	defer util.Teardown(t, category, directory, keyPair, sshAgent, uniqueID, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
 }
+func TestSizeXXXL(t *testing.T) {
+	t.Parallel()
+	uniqueID := os.Getenv("IDENTIFIER") + "-" + random.UniqueId()
+	category := "size"
+	directory := "xxxl"
+	region := "us-west-2"
+	owner := "terraform-ci@suse.com"
+	terraformOptions, keyPair := util.Setup(t, category, directory, region, owner, uniqueID)
+	sshAgent := ssh.SshAgentWithKeyPair(t, keyPair.KeyPair)
+	delete(terraformOptions.Vars, "key")
+	delete(terraformOptions.Vars, "key_name")
+	defer util.Teardown(t, category, directory, keyPair, sshAgent, uniqueID, terraformOptions)
+	terraform.InitAndApply(t, terraformOptions)
+}

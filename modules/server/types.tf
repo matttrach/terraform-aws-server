@@ -31,5 +31,11 @@ locals {
       ram     = "32",
       storage = "2000",
     }
+    xxxl = { # control plane handling 2000+ agents, also fits requirements for a very large database server or high-performance computing
+      id      = "m5.4xlarge",
+      cpu     = "16",
+      ram     = "64",
+      storage = "4000",
+    }
   }
 }

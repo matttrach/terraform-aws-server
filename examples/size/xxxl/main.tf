@@ -10,10 +10,10 @@ provider "aws" {
 locals {
   identifier   = var.identifier # this is a random unique string that can be used to identify resources in the cloud provider
   category     = "size"
-  example      = "large"
+  example      = "xxxl"
   email        = "terraform-ci@suse.com"
   project_name = "tf-${substr(md5(join("-", [local.category, local.example, md5(local.identifier)])), 0, 5)}-${local.identifier}"
-  image        = "sles-15"
+  image        = "sles-16"
 }
 
 resource "random_pet" "server" {
@@ -41,7 +41,7 @@ module "this" {
   # version = "v1.1.1" # when using this example you will need to set the version
   image_type          = local.image
   server_name         = "${local.project_name}-${random_pet.server.id}"
-  server_type         = "large"
+  server_type         = "xxxl"
   subnet_name         = keys(module.access.subnets)[0]
   security_group_name = module.access.security_group.tags_all.Name
 }
