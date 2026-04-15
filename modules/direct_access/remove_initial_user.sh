@@ -57,8 +57,8 @@ p_s() {
 }
 
 sleep 2 # wait for previous connection to close
-if [ -n "$(which killall)" ]; then kill_all;
-elif [ -n "$(which pkill)" ]; then p_kill;
+if [ -n "$(command -v killall)" ]; then kill_all;
+elif [ -n "$(command -v pkill)" ]; then p_kill;
 else p_s;
 fi
 

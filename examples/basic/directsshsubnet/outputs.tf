@@ -5,6 +5,7 @@ output "image" {
   value = module.this.image
 }
 output "access" {
-  value = module.access
+  value     = module.access
+  sensitive = true
 }
 

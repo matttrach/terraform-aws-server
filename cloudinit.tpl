@@ -23,3 +23,8 @@ users:
     ssh_authorized_keys:
       - ${ssh_key}
 fqdn: ${name}
+
+bootcmd:
+  - install -d ${workfolder}
+  - chown ${image_user}:${image_user} ${workfolder}
+  - chmod 755 ${workfolder}

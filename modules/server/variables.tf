@@ -29,6 +29,20 @@ variable "type" {
     The designation from types.tf of the EC2 instance type to create.
   EOT
 }
+variable "image_supports_c8" {
+  type        = bool
+  description = <<-EOT
+    Whether or not the image selected supports the C8 instance type.
+  EOT
+  default     = false
+}
+variable "image_supports_c7" {
+  type        = bool
+  description = <<-EOT
+    Whether or not the image selected supports the C7 instance type.
+  EOT
+  default     = false
+}
 variable "image" {
   type = object({
     id          = string

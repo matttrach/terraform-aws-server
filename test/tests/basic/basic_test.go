@@ -8,8 +8,8 @@ import (
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/ssh"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	util "github.com/rancher/terraform-aws-server/test/tests"
 	"github.com/stretchr/testify/assert"
-  util "github.com/rancher/terraform-aws-server/test/tests"
 )
 
 func TestBasicBasic(t *testing.T) {
@@ -91,7 +91,10 @@ func TestBasicIndirectDomain(t *testing.T) {
 	zone := os.Getenv("ZONE")
 	acmeserver := os.Getenv("ACME_SERVER_URL")
 	if acmeserver == "" {
-		os.Setenv("ACME_SERVER_URL", "https://acme-staging-v02.api.letsencrypt.org/directory")
+		err := os.Setenv("ACME_SERVER_URL", "https://acme-staging-v02.api.letsencrypt.org/directory")
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 	id := os.Getenv("IDENTIFIER")
 	if id == "" {
@@ -135,7 +138,10 @@ func TestBasicDirectNetworkDomain(t *testing.T) {
 	zone := os.Getenv("ZONE")
 	acmeserver := os.Getenv("ACME_SERVER_URL")
 	if acmeserver == "" {
-		os.Setenv("ACME_SERVER_URL", "https://acme-staging-v02.api.letsencrypt.org/directory")
+		err := os.Setenv("ACME_SERVER_URL", "https://acme-staging-v02.api.letsencrypt.org/directory")
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 	id := os.Getenv("IDENTIFIER")
 	if id == "" {

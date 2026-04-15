@@ -73,7 +73,7 @@ module "this" {
     aws_keypair_use_strategy = (local.image == "sle-micro-55" ? "select" : "skip")
     ssh_key_name             = (local.image == "sle-micro-55" ? local.ssh_key_name : "")
     public_ssh_key           = local.ssh_key
-    user_workfolder          = (strcontains(local.image, "cis") ? "/var/tmp" : "/home/${local.username}")
+    user_workfolder          = (strcontains(local.image, "cis") ? "/opt/bootstrap" : "/home/${local.username}")
     timeout                  = 5
   }
 }

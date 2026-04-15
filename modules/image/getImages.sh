@@ -16,7 +16,7 @@ while getopts ":t:ro" opt; do
   esac
 done
 
-if [ -z "$type" ]; then echo 'type (-t) required'; exit 1; fi
+if [ -z "$type" ]; then echo 'type (-t) required, one of sle-micro, sles, multi-linux-manager-server, ubuntu, rhel-9, cis, rocky'; exit 1; fi
 
 declare -a image_names
 declare -a image_objects
@@ -25,7 +25,7 @@ while IFS= read -r region; do
   export AWS_REGION="$region"
 
   # echo "looking in region: $AWS_REGION OR $AWS_DEFAULT_REGION"
-  if [ "sle-micro" = "$type" ] || [ "sles" = "$type" ] || [ "liberty" = "$type" ]; then
+  if [ "sle-micro" = "$type" ] || [ "sles" = "$type" ] || [ "suse-multi-linux-manager-server" = "$type" ]; then
     # valid SUSE types
     NAME="$(
       curl -qs  https://susepubliccloudinfo.suse.com/v1/amazon/images | jq '.images[] |
@@ -38,7 +38,7 @@ while IFS= read -r region; do
         jq -r '.[].name'
     )"
     for n in $NAME; do
-      IMAGE="$(aws ec2 describe-images --filter="Name=name,Values=$n" | jq -r '.Images[0]')"
+      IMAGE="$(aws ec2 describe-images --filter="Name=name,Values=$n*" | jq -r '.Images[0]')"
       if [ "null" != "$IMAGE" ]; then
         image_names+=("$(jq -r '.Name' <<< "$IMAGE")")
         image_objects+=("$IMAGE")
@@ -57,7 +57,9 @@ while IFS= read -r region; do
         image_objects+=("$IMAGE")
       fi
   elif [ "ubuntu"  = "$type" ]; then
-      IMAGE="$(aws ec2 describe-images --filter="Name=name,Values=ubuntu/images/*/ubuntu-*-*.04-amd64-server-*" | jq -r '.Images')"
+      # ubuntu-minimal/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-minimal-20260323-prod-u7oazfncxktmo
+      # ubuntu-minimal/images/hvm-ssd/ubuntu-jammy-22.04-amd64-minimal-20260408-50c8dca0-a060-4e40-b30a-b612e829b2a3
+      IMAGE="$(aws ec2 describe-images --filter="Name=name,Values=ubuntu-minimal/images/*/ubuntu-*-*-amd64-minimal-*" | jq -r '.Images')"
       if [ "null" != "$IMAGE" ]; then
         image_names+=("$(jq -r '.[].Name' <<< "$IMAGE")")
         image_objects+=("$IMAGE")
@@ -84,7 +86,7 @@ while IFS= read -r region; do
     # invalid type
     echo "$type isn't a valid type"
     echo "current valid types are:"
-    echo "sle-micro, sles, liberty, ubuntu, rhel-9, cis, rocky"
+    echo "sle-micro, sles, multi-linux-manager-server, ubuntu, rhel-9, cis, rocky"
   fi
 
   if [ $group_by_region == true ]; then

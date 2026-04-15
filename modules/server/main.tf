@@ -1,11 +1,13 @@
 locals {
-  use    = var.use   # the strategy to use for selecting or creating a server
-  image  = var.image # the image object from the image module to use for the ec2 instance
-  select = (local.use == "select" ? 1 : 0)
-  create = (local.use == "create" ? 1 : 0)
-  id     = var.id   # the id of a server to select
-  name   = var.name # the name to give the new server
-  type   = var.type # the designation from types.tf
+  use               = var.use   # the strategy to use for selecting or creating a server
+  image             = var.image # the image object from the image module to use for the ec2 instance
+  select            = (local.use == "select" ? 1 : 0)
+  create            = (local.use == "create" ? 1 : 0)
+  id                = var.id   # the id of a server to select
+  name              = var.name # the name to give the new server
+  type              = var.type # the designation from types.tf
+  image_supports_c8 = var.image_supports_c8
+  image_supports_c7 = var.image_supports_c7
   # tflint-ignore: terraform_unused_declarations
   fail_type      = (local.create == 1 && local.server_type == null ? one([local.type, "type_not_found"]) : false)
   ip_family      = var.ip_family

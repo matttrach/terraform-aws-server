@@ -207,18 +207,6 @@ rhel-9 = {
   workfolder   = "~"
 },
 
-# this is a community AMI with no product code or marketplace page, but it is produced by our cloud team
-# suse-liberty-linux-8-9-byos-v20240603-x86_64
-liberty-8 = {
-  user         = "ec2-user",
-  group        = "wheel",
-  name         = "suse-liberty-linux-8-*-byos-v*-x86_64",
-  name_regex   = "^suse-liberty-linux-8-[0-9]-byos-v[0-9]+-x86_64$",
-  product_code = "",
-  owners       = ["013907871322"],
-  architecture = "x86_64",
-  workfolder   = "~"
-},
 ```
 
 ## Examples

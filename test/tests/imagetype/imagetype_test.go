@@ -8,8 +8,8 @@ import (
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/ssh"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	util "github.com/rancher/terraform-aws-server/test/tests"
 	"github.com/stretchr/testify/assert"
-  util "github.com/rancher/terraform-aws-server/test/tests"
 )
 
 func TestImageTypeBasic(t *testing.T) {

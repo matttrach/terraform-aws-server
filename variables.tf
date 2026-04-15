@@ -67,7 +67,7 @@ variable "image_type" {
         "ubuntu-24",
         "rocky-9",
         "rhel-9",
-        "liberty-8"
+        "suse-multi-linux-manager-server-5",
   EOT
   default     = ""
   validation {
@@ -84,7 +84,7 @@ variable "image_type" {
         "ubuntu-24",
         "rocky-9",
         "rhel-9",
-        "liberty-8"
+        "suse-multi-linux-manager-server-5",
       ], var.image_type)
     )
     error_message = <<-EOT
@@ -100,7 +100,7 @@ variable "image_type" {
         "ubuntu-24",
         "rocky-9",
         "rhel-9",
-        "liberty-8"
+        "suse-multi-linux-manager-server-5",
     EOT
   }
 }
