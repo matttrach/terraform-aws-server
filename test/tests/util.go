@@ -33,10 +33,10 @@ func Teardown(t *testing.T, category string, directory string, keyPair *aws.Ec2K
 	}
 	testDataDir := fwd + "/test/data/" + id
 	err5 := os.RemoveAll(testDataDir)
-  require.NoError(t, err5)
-  exampleDataDir := fwd + "/examples/" + category + "/" + directory + "/data"
-  err6 := os.RemoveAll(exampleDataDir)
-  require.NoError(t, err6)
+	require.NoError(t, err5)
+	exampleDataDir := fwd + "/examples/" + category + "/" + directory + "/data"
+	err6 := os.RemoveAll(exampleDataDir)
+	require.NoError(t, err6)
 	aws.DeleteEC2KeyPair(t, keyPair)
 	agent.Stop()
 }
@@ -76,7 +76,7 @@ func Setup(t *testing.T, category string, directory string, region string, owner
 	}
 	testDataDir := fgd + "/test/data/" + uniqueID
 
-	err4 := os.Mkdir(fgd + "/test/data", 0755)
+	err4 := os.Mkdir(fgd+"/test/data", 0755)
 	if err4 != nil && !os.IsExist(err4) {
 		require.NoError(t, err4)
 	}
@@ -89,24 +89,24 @@ func Setup(t *testing.T, category string, directory string, region string, owner
 	require.NoError(t, err6)
 	for _, f := range files {
 
-    // copy all the files to the test data dir to prevent collisions
-    // the number of parent directories to repo root must be the same as in the example
-    //   this is because the module source is a relative path '../../../'
-    base := filepath.Base(f)
-    if strings.HasPrefix(base, ".") {
-       continue // skip hidden files
-    }
+		// copy all the files to the test data dir to prevent collisions
+		// the number of parent directories to repo root must be the same as in the example
+		//   this is because the module source is a relative path '../../../'
+		base := filepath.Base(f)
+		if strings.HasPrefix(base, ".") {
+			continue // skip hidden files
+		}
 		fileName := strings.Split(f, "/")[len(strings.Split(f, "/"))-1]
 		err7 := os.Link(f, fmt.Sprintf("%s/%s", testDataDir, fileName))
 		require.NoError(t, err7)
 	}
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-    // example files are copied to the test directory
+		// example files are copied to the test directory
 		TerraformDir: testDataDir,
 		// Variables to pass to our Terraform code using -var options
 		Vars: map[string]interface{}{
-			"key":        keyPair.KeyPair.PublicKey,
+			"key":        keyPair.PublicKey,
 			"key_name":   keyPairName,
 			"identifier": uniqueID,
 		},

@@ -9,8 +9,8 @@ import (
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/ssh"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	util "github.com/rancher/terraform-aws-server/test/tests"
 	"github.com/stretchr/testify/assert"
-  util "github.com/rancher/terraform-aws-server/test/tests"
 )
 
 func TestOs(t *testing.T) {
@@ -24,7 +24,7 @@ func TestOs(t *testing.T) {
 		region = "us-west-2"
 	}
 	owner := "terraform-ci@suse.com"
-  imageType := os.Getenv("IMAGE")
+	imageType := os.Getenv("IMAGE")
 
 	// get the image list from the imagetype example
 	category := "imagetype"
@@ -45,11 +45,11 @@ func TestOs(t *testing.T) {
 	util.Teardown(t, category, directory, keyPair, sshAgent, uniqueID, imageTypesTerraformOptions)
 	for k := range images {
 		image := images[k].String()
-    if imageType != "" && imageType != image {
-      continue
-    }
+		if imageType != "" && imageType != image {
+			continue
+		}
 
-    t.Run(image, func(t *testing.T) {
+		t.Run(image, func(t *testing.T) {
 			t.Parallel()
 			t.Logf("Running test for %s", image)
 			uniqueID := id + "-" + random.UniqueId()
@@ -67,9 +67,9 @@ func TestOs(t *testing.T) {
 			}
 			out := terraform.OutputAll(t, terraformOptions)
 			t.Logf("out: %v", out)
-			outputServer, ok := out["server"].(map[string]interface{})
+			outputServer, ok := out["server"].(map[string]any)
 			assert.True(t, ok, fmt.Sprintf("Wrong data type for 'server', expected map[string], got %T", out["server"]))
-			outputImage, ok := out["image"].(map[string]interface{})
+			outputImage, ok := out["image"].(map[string]any)
 			assert.True(t, ok, fmt.Sprintf("Wrong data type for 'image', expected map[string], got %T", out["image"]))
 			assert.NotEmpty(t, outputServer["public_ip"], "The 'server.public_ip' is empty")
 			assert.NotEmpty(t, outputImage["id"], "The 'image.id' is empty")

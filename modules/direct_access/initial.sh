@@ -8,17 +8,22 @@ NAME="${3}"
 ADMIN_GROUP="${4}"
 TIMEOUT="${5}" # this is the timeout in minutes to wait for cloud-init
 IGNORE_CLOUDINIT="${6}"
+USER_WORKFOLDER="${7}"
 
 if [ -z "${INITIAL_USER}" ]; then echo "INITIAL_USER is not set"; exit 1; fi
 if [ -z "${USER}" ]; then echo "USER is not set"; exit 1; fi
 if [ -z "${NAME}" ]; then echo "NAME is not set"; exit 1; fi
 if [ -z "${ADMIN_GROUP}" ]; then echo "ADMIN_GROUP is not set"; exit 1; fi
+
 # default timeout to 5min
 if [ -z "${TIMEOUT}" ]; then TIMEOUT=5; fi
 if [ -z "${IGNORE_CLOUDINIT}" ]; then IGNORE_CLOUDINIT=0; fi
-if [ -z "$(which cloud-init)" ]; then IGNORE_CLOUDINIT=1; fi
+if [ -z "$(command -v cloud-init)" ]; then IGNORE_CLOUDINIT=1; fi
 if [ "${IGNORE_CLOUDINIT}" = "false" ]; then IGNORE_CLOUDINIT=0; fi
 if [ "${IGNORE_CLOUDINIT}" = "true" ]; then IGNORE_CLOUDINIT=1; fi
+
+# default user workfolder to the user's home
+if [ -z "${USER_WORKFOLDER}" ]; then USER_WORKFOLDER="/home/${USER}"; fi
 
 EXIT=0
 max_attempts=$((TIMEOUT * 60 / 10))
@@ -29,11 +34,11 @@ if [ "${IGNORE_CLOUDINIT}" -eq 1 ]; then
   echo "cloud-init not found or ignored, attempting other tools...";
   # check for user, if it doesn't exist generate it
   if [ "$(awk -F: '{ print $1 }' /etc/passwd | grep "${USER}")" = "" ]; then
-    if [ "$(which addgroup)" != "" ]; then
+    if [ "$(command -v addgroup)" != "" ]; then
         addgroup "${USER}" # generate a group for the user
         adduser  --ingroup "${USER}" --shell "/bin/sh" --disabled-password --gecos "${USER}" "${USER}"
         adduser  "${USER}" "${ADMIN_GROUP}"
-    elif [ "$(which useradd)" != "" ]; then
+    elif [ "$(command -v useradd)" != "" ]; then
         useradd -U -s "/bin/sh" -m -G "${ADMIN_GROUP}" "${USER}"
         echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
     else
@@ -67,7 +72,7 @@ else
 fi
 
 # we need to make sure the hostname is set properly if possible
-if [ "$(which hostnamectl)" = "" ]; then
+if [ "$(command -v hostnamectl)" = "" ]; then
   echo "hostnamectl not found";
 else
   hostnamectl set-hostname "${NAME}"
@@ -76,9 +81,20 @@ fi
 # some images set sshd config to only allow initial user to connect (CIS)
 # add our user to the list of allowed users and restart sshd
 if [ "${INITIAL_USER}" != "${USER}" ]; then
-  sed -i 's/^AllowUsers.*/& '"${USER}"'/' /etc/ssh/sshd_config
+
+  # some systems use modular sshd configuration
+  if [ -d "/etc/ssh/sshd_config.d" ]; then
+    echo "AllowUsers ${USER}" > /etc/ssh/sshd_config.d/50-allow-users.conf
+  elif [ -f "/etc/ssh/sshd_config" ]; then
+    sed -i 's/^AllowUsers.*/& '"${USER}"'/' /etc/ssh/sshd_config
+  fi
   systemctl restart sshd || true
   systemctl restart ssh || true # ubuntu 24.04...>:(
 fi
+
+# set up new user's workfolder
+install -d "$USER_WORKFOLDER"
+chown "$USER": "$USER_WORKFOLDER"
+chmod 755 "$USER_WORKFOLDER"
 
 exit $EXIT

@@ -149,7 +149,7 @@ resource "terraform_data" "setup" {
       set -x
       set -e
       sudo chmod +x ${local.image_workfolder}/initial.sh
-      sudo ${local.image_workfolder}/initial.sh ${local.image.user} ${local.ssh.user} ${local.server.name} ${local.image.admin_group} ${local.ssh.timeout} ${local.cloudinit_ignore}
+      sudo ${local.image_workfolder}/initial.sh ${local.image.user} ${local.ssh.user} ${local.server.name} ${local.image.admin_group} ${local.ssh.timeout} ${local.cloudinit_ignore} ${local.ssh.user_workfolder}
     EOT
     ]
   }

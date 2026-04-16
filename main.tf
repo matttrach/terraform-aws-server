@@ -73,6 +73,7 @@ locals {
     admin_group = module.image[0].image.admin_group
     ssh_key     = local.server_user.public_ssh_key
     name        = local.server_name
+    workfolder  = module.image[0].image.workfolder
   }) : "")
   # tflint-ignore: terraform_unused_declarations
   fail_cloudinit_specify = ((local.cloudinit_use_strategy == "specify" && local.user_init == "" ? one([local.user_init, "missing_cloudinit"]) : false))
@@ -120,6 +121,8 @@ module "server" {
   type                     = local.server_type
   ip_family                = local.server_ip_family
   image                    = module.image[0].image
+  image_supports_c8        = try(module.image[0].types[local.image_type].supports_c8, false)
+  image_supports_c7        = try(module.image[0].types[local.image_type].supports_c7, false)
   subnet                   = local.server_subnet_name
   security_group           = local.server_security_group_name
   ip                       = local.server_private_ip

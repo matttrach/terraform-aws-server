@@ -7,7 +7,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/ssh"
 	"github.com/gruntwork-io/terratest/modules/terraform"
-  util "github.com/rancher/terraform-aws-server/test/tests"
+	util "github.com/rancher/terraform-aws-server/test/tests"
 )
 
 func TestSizeSmall(t *testing.T) {
