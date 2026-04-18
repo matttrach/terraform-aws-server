@@ -20,3 +20,5 @@ examples/*/50-*
 *.DS_*
 test/data/*
 *.test
+.claude
+.claude/*

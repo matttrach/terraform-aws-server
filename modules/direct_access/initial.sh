@@ -34,6 +34,18 @@ if [ "${IGNORE_CLOUDINIT}" -eq 1 ]; then
   echo "cloud-init not found or ignored, attempting other tools...";
   # check for user, if it doesn't exist generate it
   if [ "$(awk -F: '{ print $1 }' /etc/passwd | grep "${USER}")" = "" ]; then
+    # check if admin group exists, create it if missing
+    if [ "$(getent group "${ADMIN_GROUP}")" = "" ]; then
+      echo "Admin group '${ADMIN_GROUP}' not found, creating it...";
+      if [ "$(command -v groupadd)" != "" ]; then
+        groupadd "${ADMIN_GROUP}"
+      elif [ "$(command -v addgroup)" != "" ]; then
+        addgroup "${ADMIN_GROUP}"
+      else
+        echo "No supported group creation tool found";
+        EXIT=1
+      fi
+    fi
     if [ "$(command -v addgroup)" != "" ]; then
         addgroup "${USER}" # generate a group for the user
         adduser  --ingroup "${USER}" --shell "/bin/sh" --disabled-password --gecos "${USER}" "${USER}"

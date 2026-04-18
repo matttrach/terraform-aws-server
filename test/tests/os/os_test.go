@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/random"
@@ -73,6 +74,32 @@ func TestOs(t *testing.T) {
 			assert.True(t, ok, fmt.Sprintf("Wrong data type for 'image', expected map[string], got %T", out["image"]))
 			assert.NotEmpty(t, outputServer["public_ip"], "The 'server.public_ip' is empty")
 			assert.NotEmpty(t, outputImage["id"], "The 'image.id' is empty")
+
+			// Validate SSH connection and user setup
+			publicIP, ok := outputServer["public_ip"].(string)
+			assert.True(t, ok, "public_ip is not a string")
+			identifier := terraformOptions.Vars["identifier"].(string)
+			username := strings.ToLower(fmt.Sprintf("tf-%s", identifier))
+			if len(username) > 32 {
+				username = username[:32]
+			}
+
+			host := ssh.Host{
+				Hostname:    publicIP,
+				SshUserName: username,
+				SshKeyPair:  keyPair.KeyPair,
+			}
+
+			// Test SSH connection
+			t.Logf("Testing SSH connection to %s@%s", username, publicIP)
+			result := ssh.CheckSshCommand(t, host, "whoami")
+			assert.Contains(t, result, username, "SSH connection failed or returned unexpected user")
+
+			// Test sudo access
+			t.Logf("Testing sudo access for %s", username)
+			sudoResult := ssh.CheckSshCommand(t, host, "sudo whoami")
+			assert.Contains(t, sudoResult, "root", "Sudo access failed")
+
 			util.Teardown(t, category, directory, keyPair, sshAgent, uniqueID, terraformOptions)
 		})
 	}
