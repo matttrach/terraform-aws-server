@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # https://github.com/googleapis/release-please-action
-      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         id: release-please
         with:
           release-type: terraform-module
@@ -58,7 +58,7 @@ jobs:
           fetch-depth: 0
       - id: aws-creds
         # https://github.com/aws-actions/configure-aws-credentials/releases
-        uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
+        uses: aws-actions/configure-aws-credentials@d979d5b3a71173a29b74b5b88418bfda9437d885 # v6.1.1
         if: steps.release-please.outputs.pr
         with:
           role-to-assume: ${{env.AWS_ROLE}}
