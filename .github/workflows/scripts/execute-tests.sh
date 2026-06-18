@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 
-./run_tests.sh
+bash ./run_tests.sh

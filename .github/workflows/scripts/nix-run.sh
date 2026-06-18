@@ -17,7 +17,11 @@ fi
 export SSL_CERT_FILE="${NIX_SSL_CERT_FILE:-}"
 export CURL_CA_BUNDLE="${NIX_SSL_CERT_FILE:-}"
 
-printf "%s\n" "$*" > .nix-script.sh
+{
+  echo "git config --global --add safe.directory \"$PWD\""
+  printf "%s\n" "$*"
+} > .nix-script.sh
+
 trap 'rm -f .nix-script.sh' EXIT
 
 # Ensure the suse user can read/write the script and current directory
