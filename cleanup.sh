@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This script is run by the run_tests.sh script to clean up AWS resources created during testing.
 # It can also be run independently to clean up resources by providing a cleanup ID.

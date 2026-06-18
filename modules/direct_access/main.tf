@@ -36,7 +36,19 @@ resource "terraform_data" "input_validation" {
   lifecycle {
     precondition {
       condition     = !(local.add_domain && length(local.domain_ips) == 0)
-      error_message = "missing_domain_ips: The domain_ips must be provided when add_domain is true."
+      error_message = "missing_domain_ips: The domain.ips must be provided when add_domain is true."
+    }
+    precondition {
+      condition     = !(local.add_domain && local.domain.zone == "")
+      error_message = "missing_domain_zone: The domain.zone must be provided when add_domain is true."
+    }
+    precondition {
+      condition     = !(local.add_domain && local.domain.type == "")
+      error_message = "missing_domain_type: The domain.type must be provided when add_domain is true."
+    }
+    precondition {
+      condition     = !(local.add_domain && local.domain.name == "")
+      error_message = "missing_domain_name: The domain.name must be provided when add_domain is true."
     }
   }
 }

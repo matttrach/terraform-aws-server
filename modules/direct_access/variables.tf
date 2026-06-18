@@ -117,7 +117,7 @@ variable "domain" {
     The name is the name of the domain to add.
     The zone_id is the zone id of the domain to add.
     The type is the type of domain to add, one of 'A' or 'AAAA'.
-    ips is the the ip addresses to add to the domain.
+    "ips" is a list of the ip addresses to add to the domain.
   EOT
 }
 
