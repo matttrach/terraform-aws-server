@@ -218,7 +218,7 @@ if [ -z "$cleanup_id" ]; then
   mkdir -p "$GLOBAL_TF_PLUGIN_CACHE"
   export TF_PLUGIN_CACHE_DIR="$GLOBAL_TF_PLUGIN_CACHE"
   while IFS= read -r dir; do
-    pushd "$dir"
+    pushd "$dir" || exit
 
     needs_mirror=false
 
@@ -242,7 +242,7 @@ if [ -z "$cleanup_id" ]; then
     fi
     rm -rf .terraform
 
-    popd
+    popd || exit
   done <<< "$(find "$REPO_ROOT/examples" -name 'main.tf' -not -path '*/.terraform/*' -exec dirname {} \; | sort -u)"
   unset TF_PLUGIN_CACHE_DIR
 
